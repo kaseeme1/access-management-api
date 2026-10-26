@@ -117,7 +117,16 @@ GitHub Actions runs the tests on Python 3.10, 3.12, and 3.13, then builds the Do
 
 ## How this was built
 
-Project scaffolding (API routes, database layer, test suite, Docker, and CI pipeline) was set up with help from an AI assistant. The access management logic (onboarding, role changes, offboarding, and access reviews) was written by me. The whole idea of this project is for employers to see that i understand (TDD). Considering the tests aren't the real product, The API is so enjoy looking through my project and thank you for your time!
+This project was built test-first (TDD): the expected behavior was written as tests,
+then the code was written to pass them.
+
+The project scaffolding and test suite were built with the help of AI but i designed the API layer and the onboarding logic and i also designed the access-change helpers (`access_to_remove`,
+`access_to_add`, and `apply_access_changes`) that role changes, offboarding, and access
+reviews are built on, so that every change only touches the access that actually needs to
+change.
+
+The tests describe the behavior, but the API is the real product, so feel free to run it
+locally and try it out. Thanks for taking the time to look through it. Feel free to ask me any questions as to why i made certain changes.
 
 ## License
 
