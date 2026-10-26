@@ -80,6 +80,16 @@ def revoke_access(conn: sqlite3.Connection, employee_id: int, systems: set[str] 
     )
 
 
+def apply_access_changes(
+    conn: sqlite3.Connection,
+    employee_id: int,
+    to_remove: set[str] | frozenset[str],
+    to_add: set[str] | frozenset[str],
+) -> None:
+    revoke_access(conn, employee_id, to_remove)
+    grant_access(conn, employee_id, to_add)
+
+
 def add_audit(conn: sqlite3.Connection, actor: str, action: str, employee_id: int | None, details: str = "") -> None:
     conn.execute(
         "INSERT INTO audit_log (timestamp, actor, action, employee_id, details) VALUES (?, ?, ?, ?, ?)",

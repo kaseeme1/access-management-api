@@ -98,6 +98,7 @@ app/
   main.py         API routes, auth, error handling
   services.py     onboarding, role changes, offboarding, access review
   roles.py        role -> access policy
+  access.py       access change helpers (what to add / remove)
   repository.py   all database reads and writes
   database.py     SQLite connection and schema
   models.py       domain objects and errors
