@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: pytest -v
+
+  docker:
+    name: Docker build + smoke test
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build image
+        run: docker build -t access-management-api .
+
+      - name: Start container
+        run: |
+          docker run -d --name api -p 8000:8000 -e ACCESS_API_KEY=ci-key access-management-api
+          for i in $(seq 1 20); do
+            curl -sf http://localhost:8000/health && break
+            sleep 1
+          done
+
+      - name: API rejects requests without a key
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000/employees)
+          test "$code" = "401"
+
+      - name: Onboard and offboard an employee
+        run: |
+          curl -sf -X POST http://localhost:8000/employees \
+            -H "X-API-Key: ci-key" -H "Content-Type: application/json" \
+            -d '{"name":"CI User","email":"ci.user@example.com","department":"QA","role":"cashier"}'
+          curl -sf -X POST http://localhost:8000/employees/1/offboard -H "X-API-Key: ci-key"
+          curl -sf http://localhost:8000/access-review -H "X-API-Key: ci-key" | grep -q '^\[\]$'
+
+      - name: Container logs
+        if: always()
+        run: docker logs api

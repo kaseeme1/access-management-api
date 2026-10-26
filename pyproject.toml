@@ -1,0 +1,11 @@
+[project]
+name = "access-management-api"
+version = "0.1.0"
+description = "Employee access management API with least-privilege roles, audit logging, and access reviews."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Kaseem Edwards" }]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
