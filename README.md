@@ -116,7 +116,7 @@ GitHub Actions runs the tests on Python 3.10, 3.12, and 3.13, then builds the Do
 
 ## How this was built
 
-Project scaffolding (API routes, database layer, test suite, Docker, and CI pipeline) was set up with help from an AI assistant. The access management logic (onboarding, role changes, offboarding, and access reviews) was written by me.
+Project scaffolding (API routes, database layer, test suite, Docker, and CI pipeline) was set up with help from an AI assistant. The access management logic (onboarding, role changes, offboarding, and access reviews) was written by me. The whole idea of this project is for employers to see that i understand (TDD). Considering the tests aren't the real product, The API is so enjoy looking through my project and thank you for your time!
 
 ## License
 
